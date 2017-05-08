@@ -31,9 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(LoginActivity.this,SensorChartActivity.class);
-//                startActivity(intent);
-                Intent intent = new Intent(LoginActivity.this,NodeChartActivity.class);
+                Intent intent = new Intent(LoginActivity.this,GatewayListActivity.class);
                 startActivity(intent);
             }
         });

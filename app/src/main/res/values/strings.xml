@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GraduationProject</string>
+    <string name="app_name">农业物联网</string>
     <string name="title_activity_func_abs">FuncAbsActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
