@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.graduationproject.sql.DatabaseManager;
 
@@ -17,7 +16,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private ImageView img_pic;
 
-//    private DatabaseManager dbManager;
+    private DatabaseManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +31,15 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this,GatewayChartsActivity.class);
+//                Intent intent = new Intent(LoginActivity.this,SensorChartActivity.class);
+//                startActivity(intent);
+                Intent intent = new Intent(LoginActivity.this,NodeChartActivity.class);
                 startActivity(intent);
             }
         });
 
 
-//        dbManager = new DatabaseManager(this);
-//        dbManager.selectAllUser();
+        dbManager = new DatabaseManager(this);
+        dbManager.selectAllUser();
     }
 }

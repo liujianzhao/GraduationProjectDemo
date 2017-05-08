@@ -2,45 +2,59 @@ package com.example.graduationproject.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
+import android.util.AttributeSet;
 import android.util.Log;
 
 import org.xclcharts.chart.BarChart;
 import org.xclcharts.common.DensityUtil;
 import org.xclcharts.common.IFormatterDoubleCallBack;
 import org.xclcharts.common.IFormatterTextCallBack;
+import org.xclcharts.renderer.XEnum;
 import org.xclcharts.view.ChartView;
 
 import java.text.DecimalFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * Created by liuji on 2017/5/4.
- * 通用的柱形图相关属性设置
+ * Created by liuji on 2017/5/7.
+ * 通用的密集柱形图相关属性设置
  */
 
-public class BaseBarChartView extends ChartView{
+public class BaseBarChartView extends ChartView {
 
-    private String TAG = "BarChartView";
+    private String TAG = "BaseBarChartView";
+    protected BarChart chart = new BarChart();
 
-    private int mOffsetHeight = 0;
-    protected BarChart mChart = null;
-
-    public BaseBarChartView(Context context, int offsetHeight) {
+    public BaseBarChartView(Context context) {
         super(context);
-
-        this.mOffsetHeight = offsetHeight;
-        chartRender();
+        initView();
     }
+
+    public BaseBarChartView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initView();
+    }
+
+    public BaseBarChartView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        initView();
+    }
+
+    private void initView() {
+        chartRender();
+        //綁定手势滑动事件
+        this.bindTouch(this, chart);
+    }
+
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         //图所占范围大小
-        //mChart.setChartRange(w,h);
+        chart.setChartRange(w, h);
     }
 
-    //Demo中bar chart所使用的默认偏移值。
-    //偏移出来的空间用于显示tick,axistitle....
     protected int[] getBarLnDefaultSpadding()
     {
         int [] ltrb = new int[4];
@@ -51,25 +65,28 @@ public class BaseBarChartView extends ChartView{
         return ltrb;
     }
 
-    public void chartRender()
-    {
+    private void chartRender() {
         try {
-
-            mChart = new BarChart();
-            //图例
-            mChart.getAxisTitle().setLeftTitle("百分比");
-
             //设置绘图区默认缩进px值,留置空间显示Axis,Axistitle....
-            int [] ltrb = getBarLnDefaultSpadding();
-            mChart.setPadding(DensityUtil.dip2px(getContext(), 50),ltrb[1], ltrb[2], ltrb[3]);
+            int[] ltrb = getBarLnDefaultSpadding();
+            chart.setPadding(ltrb[0], ltrb[1], ltrb[2], ltrb[3]);
+
+            //显示边框
+            chart.showRoundBorder();
 
             //数据轴
-            mChart.getDataAxis().setAxisMax(100);
-            mChart.getDataAxis().setAxisMin(0);
-            mChart.getDataAxis().setAxisSteps(20);
+            chart.getDataAxis().setAxisMax(100);
+            chart.getDataAxis().setAxisMin(0);
+            chart.getDataAxis().setAxisSteps(10);
+            //指隔多少个轴刻度(即细刻度)后为主刻度
+            chart.getDataAxis().setDetailModeSteps(2);
+            chart.getDataAxis().getTickLabelPaint().setTextSize(25);
+
+            //背景网格
+            chart.getPlotGrid().showHorizontalLines();
 
             //定义数据轴标签显示格式
-            mChart.getDataAxis().setLabelFormatter(new IFormatterTextCallBack(){
+            chart.getDataAxis().setLabelFormatter(new IFormatterTextCallBack() {
 
                 @Override
                 public String textFormatter(String value) {
@@ -77,41 +94,65 @@ public class BaseBarChartView extends ChartView{
                     Double tmp = Double.parseDouble(value);
                     DecimalFormat df = new DecimalFormat("#0");
                     String label = df.format(tmp).toString();
-                    return label+"%";
+                    return (label);
                 }
 
             });
-            //定义柱形上标签显示格式
-            mChart.getBar().setItemLabelVisible(true);
-            mChart.getBar().getItemLabelPaint().setColor(Color.rgb(72, 61, 139));
-            mChart.getBar().getItemLabelPaint().setFakeBoldText(true);
 
-            mChart.setItemLabelFormatter(new IFormatterDoubleCallBack() {
+            //标签旋转45度
+            chart.getCategoryAxis().setTickLabelRotateAngle(45f);
+            chart.getCategoryAxis().getTickLabelPaint().setTextSize(25);
+
+            //在柱形顶部显示值
+            chart.getBar().setItemLabelVisible(true);
+            chart.getBar().getItemLabelPaint().setTextSize(15);
+
+            //设定格式
+            chart.setItemLabelFormatter(new IFormatterDoubleCallBack() {
                 @Override
                 public String doubleFormatter(Double value) {
                     // TODO Auto-generated method stub
-                    DecimalFormat df=new DecimalFormat("#0");
+                    DecimalFormat df = new DecimalFormat("#0");
                     String label = df.format(value).toString();
-                    return label+"%";
-                }});
+                    return label;
+                }
+            });
+
+            //隐藏Key
+            chart.getPlotLegend().hide();
+
+            //让柱子间没空白
+            chart.getBar().setBarInnerMargin(0.1f); //可尝试0.1或0.5各有啥效果噢
 
 
-            mChart.DeactiveListenItemClick();
+            //禁用平移模式,可以横向滑动
+//            chart.disablePanMode();
+            chart.setPlotPanMode(XEnum.PanMode.HORIZONTAL);
 
+            //提高性能
+            chart.disableHighPrecision();
+
+            //柱形和标签居中方式
+            chart.setBarCenterStyle(XEnum.BarCenterStyle.TICKMARKS);
+
+            chart.getDataAxis().setAxisLineStyle(XEnum.AxisLineStyle.FILLCAP);
+            chart.getCategoryAxis().setAxisLineStyle(XEnum.AxisLineStyle.FILLCAP);
+            // chart.showRoundBorder();
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
     @Override
     public void render(Canvas canvas) {
-        try{
-            mChart.setChartRange(0.0f, mOffsetHeight, this.getWidth(),this.getHeight() - mOffsetHeight);
-            //mChart.setChartRange(this.getMeasuredWidth(), this.getMeasuredHeight());
-            mChart.render(canvas);
-        } catch (Exception e){
+        try {
+            chart.render(canvas);
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
     }
 
+
 }
+

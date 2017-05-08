@@ -23,11 +23,12 @@
             android:name=".GatewayListActivity"
             android:label="@string/title_activity_gateway"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GatewayChartsActivity" />
+        <activity android:name=".SensorChartActivity" />
         <activity
             android:name=".AboutActivity"
             android:label="@string/title_activity_about"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".NodeChartActivity"></activity>
     </application>
 
 </manifest>
