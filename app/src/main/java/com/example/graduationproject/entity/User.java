@@ -9,14 +9,16 @@ public class User {
     private String username;
     private String password;
     private String roleName;
+    private boolean remember;
 
     public User() {
     }
 
-    public User(String username, String password, String roleName) {
+    public User(String username, String password, String roleName, boolean remember) {
         this.username = username;
         this.password = password;
         this.roleName = roleName;
+        this.remember = remember;
     }
 
     public String getUsername() {
@@ -41,5 +43,13 @@ public class User {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public boolean isRemember() {
+        return remember;
+    }
+
+    public void setRemember(boolean remember) {
+        this.remember = remember;
     }
 }

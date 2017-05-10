@@ -3,15 +3,14 @@
     package="com.example.graduationproject">
 
     <application
+        android:name=".GPApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".FuncAbsActivity"
-            android:label="@string/title_activity_func_abs"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".FuncAbsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,15 +18,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity
-            android:name=".GatewayListActivity"
-            android:label="@string/title_activity_gateway"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".GatewayListActivity" />
         <activity android:name=".SensorChartActivity" />
-        <activity
-            android:name=".AboutActivity"
-            android:label="@string/title_activity_about"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AboutActivity" />
         <activity android:name=".NodeChartActivity"></activity>
     </application>
 

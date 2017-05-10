@@ -16,27 +16,38 @@
     <ImageView
         android:id="@+id/img_about"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="200dp"
+        android:src="@mipmap/icon_shanghai_university"/>
 
     <TextView
         android:id="@+id/tv_school"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
         android:layout_below="@+id/img_about"
-        android:text="上海大学通信学院" />
+        android:textSize="15sp"
+        android:textColor="#000000"
+        android:text="所属学校：    上海大学通信学院" />
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="15sp"
+        android:textColor="#000000"
         android:layout_below="@+id/tv_school"
-        android:text="常育荣" />
+        android:text="开发人员：    常育荣" />
 
     <TextView
         android:id="@+id/tv_contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="15sp"
+        android:textColor="#000000"
         android:layout_below="@+id/tv_name"
-        android:text="133324429334" />
+        android:text="联系电话：    133324429334" />
 
 </RelativeLayout>

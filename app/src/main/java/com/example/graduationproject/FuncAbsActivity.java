@@ -2,10 +2,7 @@ package com.example.graduationproject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,13 +10,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.graduationproject.util.SharedPreferencesUtil;
 
 public class FuncAbsActivity extends AppCompatActivity {
 
@@ -38,7 +37,12 @@ public class FuncAbsActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    private static Context context;
+    private Context context;
+
+    private LinearLayout layout_point;
+    private ImageView imageView;
+
+    private Button btn_gotouse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,49 +50,73 @@ public class FuncAbsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_func_abs);
         context = this;
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        if(!SharedPreferencesUtil.loadData(this)){
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
-        // Set up the ViewPager with the sections adapter.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        layout_point = (LinearLayout)findViewById(R.id.layout_point);
+        createPoints(3);
+        showPoint(0);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+            }
 
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 2){
+                    btn_gotouse.setVisibility(View.VISIBLE);
+                }else{
+                    btn_gotouse.setVisibility(View.GONE);
+                }
+                showPoint(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        btn_gotouse = (Button)findViewById(R.id.btn_gotouse);
+        btn_gotouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferencesUtil.saveData(context,false);
+                Intent intent = new Intent(context,LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_func_abs, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    private void createPoints(int count){
+        for(int i=0;i<count;i++){
+            imageView = new ImageView(context);
+            imageView.setImageResource(R.mipmap.icon_circle_gray);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(0,0,20,0);
+            layout_point.addView(imageView,lp);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    private void showPoint(int number){
+        int count = layout_point.getChildCount();
+        for(int i=0;i<count;i++){
+            if(i == number){
+                ImageView img = (ImageView) layout_point.getChildAt(i);
+                img.setImageResource(R.mipmap.icon_circle_wight);
+            }else{
+                ImageView img = (ImageView) layout_point.getChildAt(i);
+                img.setImageResource(R.mipmap.icon_circle_gray);
+            }
+        }
     }
 
     /**
@@ -121,17 +149,6 @@ public class FuncAbsActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_func_abs, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            Button btn_gotouse = (Button)rootView.findViewById(R.id.btn_gotouse);
-            if(getArguments().getInt(ARG_SECTION_NUMBER) == 3){
-                btn_gotouse.setVisibility(View.VISIBLE);
-            }
-            btn_gotouse.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context,LoginActivity.class);
-                    startActivity(intent);
-                }
-            });
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }

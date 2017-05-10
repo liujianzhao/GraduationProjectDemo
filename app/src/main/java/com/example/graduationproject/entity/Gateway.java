@@ -8,14 +8,14 @@ public class Gateway {
 
     private String name;
     private String ip;
-    private int   port;
-    private int  max_nodes;
-    private int  max_channels;
-    private int   poll_interval;
-    private float  X;
-    private float         Y;
-    private String         desc_string;
-    private String   pic;
+    private int port;
+    private int max_nodes;
+    private int max_channels;
+    private int poll_interval;
+    private float X;
+    private float Y;
+    private String desc_string;
+    private String pic;
 
 
     public Gateway() {
