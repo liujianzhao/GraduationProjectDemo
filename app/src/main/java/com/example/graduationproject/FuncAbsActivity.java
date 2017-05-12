@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.graduationproject.util.SharedPreferencesUtil;
@@ -148,8 +149,14 @@ public class FuncAbsActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_func_abs, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            RelativeLayout layout_funcabs = (RelativeLayout)rootView.findViewById(R.id.layout_funcabs);
+            if(getArguments().getInt(ARG_SECTION_NUMBER) == 1){
+                layout_funcabs.setBackgroundResource(R.mipmap.func_abs_login);
+            }else if(getArguments().getInt(ARG_SECTION_NUMBER) == 2){
+                layout_funcabs.setBackgroundResource(R.mipmap.func_abs_list);
+            }else if(getArguments().getInt(ARG_SECTION_NUMBER) == 3){
+                layout_funcabs.setBackgroundResource(R.mipmap.func_abs_chart);
+            }
             return rootView;
         }
     }
