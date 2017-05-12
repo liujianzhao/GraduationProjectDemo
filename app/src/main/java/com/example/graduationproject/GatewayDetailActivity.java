@@ -86,18 +86,22 @@ public class GatewayDetailActivity extends AppCompatActivity {
         dialog = CalendarDialog.getInstance(context);
         gateway = (Gateway) getIntent().getExtras().getSerializable("gateway");
 
+        //标题
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(gateway.getName());
         setSupportActionBar(toolbar);
 
+        //左右切换
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        //三个小标题
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
     }
 
+    //嵌入在activity里面的小页面
     public static class PlaceholderFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
@@ -156,6 +160,7 @@ public class GatewayDetailActivity extends AppCompatActivity {
             return rootView;
         }
 
+        //第一个页面加载数据
         private void loadDetailData() {
             zigbeeNodes = dbManager.selectZigbeeNode(String.valueOf(gateway.getId()));
             tv_name.setText(gateway.getName());
@@ -181,6 +186,7 @@ public class GatewayDetailActivity extends AppCompatActivity {
             dountChart_node.setNodeData(datas);
         }
 
+        //第二个页面加载数据
         private void loadOverAllData() {
             List<String> nodeDatas = new ArrayList<>();
             nodeDatas.add("1");
@@ -261,6 +267,7 @@ public class GatewayDetailActivity extends AppCompatActivity {
             barChart_overall_sensor.setOverAllSensorData(overall_data);
         }
 
+        //第三个页面加载数据
         private void loadRecentlyData() {
             List<String> nodeDatas = new ArrayList<>();
             nodeDatas.add("1");

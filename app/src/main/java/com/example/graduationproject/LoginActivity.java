@@ -43,16 +43,19 @@ public class LoginActivity extends AppCompatActivity {
         dialog = LoadingDialog.getInstance(context);
         dbManager = new DatabaseManager(context);
 
+        //标题
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
+        //从layout找到对象
         et_username = (EditText)findViewById(R.id.et_username);
         et_password = (EditText)findViewById(R.id.et_password);
         checkbox_remember = (CheckBox)findViewById(R.id.checkbox_remember);
         btn_login = (Button)findViewById(R.id.btn_login);
         img_pic = (ImageView)findViewById(R.id.img_pic);
 
+        //读取本地存储的用户登录信息
         User user = SharedPreferencesUtil.loadLoginUserData(context);
         if(user.isRemember()){
             et_username.setText(user.getUsername());
@@ -60,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
             checkbox_remember.setChecked(true);
         }
 
+        //设置点击事件
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //跳回主线程操作
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -76,12 +81,14 @@ public class LoginActivity extends AppCompatActivity {
             int key = msg.what;
             switch(key){
                 case 0:
+                    //登录成功调转列表页面
                     dialog.dismissDialog();
                     Intent intent = new Intent(LoginActivity.this, GatewayListActivity.class);
                     startActivity(intent);
                     finish();
                     break;
                 case 1:
+                    //登录失败提示信息
                     dialog.dismissDialog();
                     Toast.makeText(context,"用户名或密码错误！",Toast.LENGTH_LONG).show();
                     break;
@@ -96,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
+    //从数据库读取所有用户然后查询登录用户的用户名密码正确与否
     private void checkLoginUser(){
         boolean LoginComplete = false;
         List<User> users = dbManager.selectAllUser();

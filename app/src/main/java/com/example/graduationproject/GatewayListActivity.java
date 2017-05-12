@@ -71,10 +71,12 @@ public class GatewayListActivity extends AppCompatActivity
         this.context = this;
         dbManager = new DatabaseManager(context);
 
+        //标题
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
+        //菜单资源获取
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -91,6 +93,7 @@ public class GatewayListActivity extends AppCompatActivity
         tv_userName.setText(user.getUsername());
         tv_roleName.setText(user.getRoleName());
 
+        //筛选过滤器
         et_filter = (EditText)findViewById(R.id.et_filter);
         et_filter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -105,10 +108,13 @@ public class GatewayListActivity extends AppCompatActivity
 
             @Override
             public void afterTextChanged(Editable s) {
+                //具体筛选数据的操作
                 String data = et_filter.getText().toString().trim();
                 filterData(data);
             }
         });
+
+        //下拉刷新，上拉加载的listview控件
         refreshListView = (RefreshListView)findViewById(R.id.listview);
         adapter = new GatewayAdapter(context, datas);
         refreshListView.setAdapter(adapter);
@@ -132,6 +138,7 @@ public class GatewayListActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                     long arg3) {
+                //点击item跳转详情页面
                 Gateway gateway = datas.get(position-1);
                 Intent intent = new Intent(GatewayListActivity.this,GatewayDetailActivity.class);
                 Bundle b = new Bundle();
@@ -140,7 +147,7 @@ public class GatewayListActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        // 自动加载列表
+        // 进入第一次自动加载列表
         refreshListView.firstLoadDatas();
     }
 
@@ -172,6 +179,7 @@ public class GatewayListActivity extends AppCompatActivity
     Runnable run = new Runnable() {
         @Override
         public void run() {
+            //休眠1秒钟
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -203,6 +211,7 @@ public class GatewayListActivity extends AppCompatActivity
         }
     }
 
+    //边布局的弹出和收回
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -218,7 +227,7 @@ public class GatewayListActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        //边布局的item点击事件处理
         if(id == R.id.nav_scan){
             Intent intent = new Intent(this, CaptureActivity.class);
             startActivityForResult(intent, REQUEST_CODE_SCAN);
@@ -249,6 +258,7 @@ public class GatewayListActivity extends AppCompatActivity
         return true;
     }
 
+    //startactivityforresult方法返回的数据处理，处理扫一扫返回的数据
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

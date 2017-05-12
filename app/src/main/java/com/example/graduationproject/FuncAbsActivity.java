@@ -57,6 +57,7 @@ public class FuncAbsActivity extends AppCompatActivity {
             finish();
         }
 
+        //左右滑动切换
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);

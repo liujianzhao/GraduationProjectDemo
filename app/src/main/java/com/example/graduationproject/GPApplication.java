@@ -22,6 +22,7 @@ public class GPApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //预先加载一些东西
     }
 
 }
