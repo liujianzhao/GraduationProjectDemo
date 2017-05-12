@@ -75,7 +75,7 @@ public class BaseBarChartView extends ChartView {
             chart.showRoundBorder();
 
             //数据轴
-            chart.getDataAxis().setAxisMax(100);
+            chart.getDataAxis().setAxisMax(110);
             chart.getDataAxis().setAxisMin(0);
             chart.getDataAxis().setAxisSteps(10);
             //指隔多少个轴刻度(即细刻度)后为主刻度

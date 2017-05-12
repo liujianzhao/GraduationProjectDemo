@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.graduationproject">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
     <application
         android:name=".GPApplication"
         android:allowBackup="true"
@@ -9,8 +14,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity
-            android:name=".FuncAbsActivity">
+        <activity android:name=".FuncAbsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,10 +22,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".GatewayListActivity" />
-        <activity android:name=".SensorChartActivity" />
         <activity android:name=".AboutActivity" />
-        <activity android:name=".NodeChartActivity"></activity>
+        <activity android:name=".GatewayListActivity" />
+        <activity android:name=".GatewayDetailActivity" />
+        <activity android:name=".zxing.android.CaptureActivity"></activity>
     </application>
 
 </manifest>

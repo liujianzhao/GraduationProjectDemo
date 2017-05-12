@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.showDialog();
-                t.start();
+                new Thread(run).start();
             }
         });
     }
@@ -89,13 +89,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-    Thread t = new Thread(new Runnable(){
-
+    Runnable run = new Runnable() {
         @Override
         public void run() {
             checkLoginUser();
         }
-    });
+    };
 
     private void checkLoginUser(){
         boolean LoginComplete = false;

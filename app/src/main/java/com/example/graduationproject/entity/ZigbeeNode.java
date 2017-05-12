@@ -8,13 +8,13 @@ public class ZigbeeNode {
     private String created;
     private int node_addr;
     private String node_name;
-    private boolean node_online;
+    private int node_online;
     private int gateway_id;
 
     public ZigbeeNode() {
     }
 
-    public ZigbeeNode(String created, int node_addr, String node_name, boolean node_online, int gateway_id) {
+    public ZigbeeNode(String created, int node_addr, String node_name, int node_online, int gateway_id) {
         this.created = created;
         this.node_addr = node_addr;
         this.node_name = node_name;
@@ -46,11 +46,11 @@ public class ZigbeeNode {
         this.node_name = node_name;
     }
 
-    public boolean isNode_online() {
+    public int getNode_online() {
         return node_online;
     }
 
-    public void setNode_online(boolean node_online) {
+    public void setNode_online(int node_online) {
         this.node_online = node_online;
     }
 

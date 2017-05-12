@@ -2,11 +2,14 @@ package com.example.graduationproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +33,7 @@ import com.example.graduationproject.sql.DatabaseManager;
 import com.example.graduationproject.util.LoadingDialog;
 import com.example.graduationproject.util.SharedPreferencesUtil;
 import com.example.graduationproject.view.RefreshListView;
+import com.example.graduationproject.zxing.android.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +41,17 @@ import java.util.List;
 public class GatewayListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int REQUEST_CODE_SCAN = 0x0000;
+    private static final String DECODED_CONTENT_KEY = "codedContent";
+    private static final String DECODED_BITMAP_KEY = "codedBitmap";
+
     private static final int LOAD_COMPLETE = 0;
 
     private Context context;
     private DatabaseManager dbManager;
 
     private RefreshListView refreshListView;// 列表
+    private List<Gateway> backup_datas = new ArrayList<>();
     private List<Gateway> datas = new ArrayList<>();
     private GatewayAdapter adapter;
 
@@ -51,6 +61,8 @@ public class GatewayListActivity extends AppCompatActivity
 
     private ImageView img_userPic;
     private TextView tv_userName,tv_roleName;
+
+    private EditText et_filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +91,24 @@ public class GatewayListActivity extends AppCompatActivity
         tv_userName.setText(user.getUsername());
         tv_roleName.setText(user.getRoleName());
 
+        et_filter = (EditText)findViewById(R.id.et_filter);
+        et_filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String data = et_filter.getText().toString().trim();
+                filterData(data);
+            }
+        });
         refreshListView = (RefreshListView)findViewById(R.id.listview);
         adapter = new GatewayAdapter(context, datas);
         refreshListView.setAdapter(adapter);
@@ -88,26 +118,40 @@ public class GatewayListActivity extends AppCompatActivity
             public void OnRefresh() {
                 pageId = "1";
                 isRefresh = true;
-                t.start();
+                new Thread(run).start();
             }
         });
         refreshListView.setOnLoadMoreListener(new RefreshListView.IOnLoadMoreListener() {
             @Override
             public void OnLoadMore() {
                 isRefresh = false;
-                t.start();
+                new Thread(run).start();
             }
         });
         refreshListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                     long arg3) {
-                Intent intent = new Intent(GatewayListActivity.this,SensorChartActivity.class);
+                Gateway gateway = datas.get(position-1);
+                Intent intent = new Intent(GatewayListActivity.this,GatewayDetailActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("gateway",gateway);
+                intent.putExtras(b);
                 startActivity(intent);
             }
         });
         // 自动加载列表
         refreshListView.firstLoadDatas();
+    }
+
+    private void filterData(String data){
+        datas.clear();
+        for(Gateway gateway:backup_datas){
+            if(gateway.getName().contains(data)){
+                datas.add(gateway);
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     Handler handler = new Handler(){
@@ -125,8 +169,7 @@ public class GatewayListActivity extends AppCompatActivity
         }
     };
 
-    Thread t = new Thread(new Runnable(){
-
+    Runnable run = new Runnable() {
         @Override
         public void run() {
             try {
@@ -136,14 +179,16 @@ public class GatewayListActivity extends AppCompatActivity
             }
             getGatewayDatas();
         }
-    });
+    };
 
     private void getGatewayDatas(){
+        backup_datas.clear();
         datas.clear();
         List<Gateway> list = dbManager.selectAllGateway();
         for(Gateway data:list){
-            datas.add(data);
+            backup_datas.add(data);
         }
+        datas.addAll(backup_datas);
         handler.sendEmptyMessage(LOAD_COMPLETE);
     }
 
@@ -174,7 +219,10 @@ public class GatewayListActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if(id == R.id.nav_about){
+        if(id == R.id.nav_scan){
+            Intent intent = new Intent(this, CaptureActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_SCAN);
+        }else if(id == R.id.nav_about){
             Intent intent = new Intent(context,AboutActivity.class);
             startActivity(intent);
         }else if(id == R.id.nav_logout){
@@ -199,5 +247,31 @@ public class GatewayListActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 扫描二维码/条码回传
+        if (requestCode == REQUEST_CODE_SCAN && resultCode == RESULT_OK) {
+            if (data != null) {
+                boolean readComplete = false;
+                String content = data.getStringExtra(DECODED_CONTENT_KEY);
+                Bitmap bitmap = data.getParcelableExtra(DECODED_BITMAP_KEY);
+                for(Gateway gateway:datas){
+                    if(gateway.getName().equals(content)){
+                        readComplete = true;
+                        Intent intent = new Intent(GatewayListActivity.this,GatewayDetailActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable("gateway",gateway);
+                        intent.putExtras(b);
+                        startActivity(intent);
+                    }
+                }
+                if(!readComplete){
+                    Toast.makeText(context,"没有相关终端信息！",Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 }

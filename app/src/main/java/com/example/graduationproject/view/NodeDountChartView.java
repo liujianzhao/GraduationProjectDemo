@@ -65,7 +65,6 @@ public class NodeDountChartView extends BaseDountChartView{
     private void initData() {
         initChartTitle();
         chartDataSet();
-        addAttrInfo();
 
         //数据源
         chart.setDataSource(lPieData);
@@ -83,18 +82,13 @@ public class NodeDountChartView extends BaseDountChartView{
     private void chartDataSet()
     {
         lPieData.clear();
-        if(NodeData == null){
-            //设置图表数据源
-            //PieData(标签，百分比，在饼图中对应的颜色)
-            lPieData.add(new PieData("正常运行","90%",90,Color.rgb(70, 70, 255)));
-            lPieData.add(new PieData("异常状态","10%",10,Color.rgb(255,50, 50)));
-        }else{
+        if(NodeData != null){
             int normal = 0;
             int error = 0;
             int len = NodeData.size();
             for(int i=0;i<len;i++){
                 ZigbeeNode data = NodeData.get(i);
-                if(data.isNode_online()){
+                if(data.getNode_online() == 1){
                     normal++;
                 }else{
                     error++;
@@ -102,21 +96,28 @@ public class NodeDountChartView extends BaseDountChartView{
             }
             double x = normal/len*100;
             lPieData.add(new PieData("正常运行",String.valueOf(x),x,Color.rgb(70, 70, 255)));
-            lPieData.add(new PieData("异常状态",String.valueOf(100-x),100-x,Color.rgb(255,50, 50)));
+            lPieData.add(new PieData("异常状态",String.valueOf(100.0-x),100.0-x,Color.rgb(255,50, 50)));
+            addAttrInfo(x);
         }
-
+        invalidate();
     }
 
-    private void addAttrInfo()
+    private void addAttrInfo(double x)
     {
         //设置附加信息
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(30);
+        paint.setTextSize(35);
 //        paint.setColor(Color.rgb(191, 79, 75));
-        chart.getPlotAttrInfo().addAttributeInfo(XEnum.Location.LEFT, "正常运行", 0.5f, paint);
-        chart.getPlotAttrInfo().addAttributeInfo(XEnum.Location.RIGHT, "异常状态", 0.4f, paint);
+        if(x == 0.0){
+            chart.getPlotAttrInfo().addAttributeInfo(XEnum.Location.RIGHT, "异常状态", 0.4f, paint);
+        }else if(x == 100.0){
+            chart.getPlotAttrInfo().addAttributeInfo(XEnum.Location.LEFT, "正常运行", 0.4f, paint);
+        }else{
+            chart.getPlotAttrInfo().addAttributeInfo(XEnum.Location.LEFT, "正常运行", 0.4f, paint);
+            chart.getPlotAttrInfo().addAttributeInfo(XEnum.Location.RIGHT, "异常状态", 0.4f, paint);
+        }
     }
 
     @Override
@@ -125,7 +126,8 @@ public class NodeDountChartView extends BaseDountChartView{
         super.onTouchEvent(event);
         if(event.getAction() == MotionEvent.ACTION_UP)
         {
-            triggerClick(event.getX(),event.getY());
+            //使饼图可以点击
+//            triggerClick(event.getX(),event.getY());
         }
         return true;
     }

@@ -1,11 +1,14 @@
 package com.example.graduationproject.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by liuji on 2017/5/2.
  */
 
-public class Gateway {
+public class Gateway implements Serializable {
 
+    private int id;
     private String name;
     private String ip;
     private int port;
@@ -21,9 +24,10 @@ public class Gateway {
     public Gateway() {
     }
 
-    public Gateway(String name, String pic, String ip, int port, int max_nodes, int max_channels, int poll_interval, float x, float y, String desc_string) {
+
+    public Gateway(int id, String name, String ip, int port, int max_nodes, int max_channels, int poll_interval, float x, float y, String desc_string, String pic) {
+        this.id = id;
         this.name = name;
-        this.pic = pic;
         this.ip = ip;
         this.port = port;
         this.max_nodes = max_nodes;
@@ -32,6 +36,15 @@ public class Gateway {
         X = x;
         Y = y;
         this.desc_string = desc_string;
+        this.pic = pic;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
