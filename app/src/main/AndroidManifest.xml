@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.graduationproject">
-
     //使用的权限
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -26,7 +25,8 @@
         <activity android:name=".AboutActivity" />
         <activity android:name=".GatewayListActivity" />
         <activity android:name=".GatewayDetailActivity" />
-        <activity android:name=".zxing.android.CaptureActivity"></activity>
+        <activity android:name=".zxing.android.CaptureActivity" />
+        <activity android:name=".UserActivity"/>
     </application>
 
 </manifest>

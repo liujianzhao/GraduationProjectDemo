@@ -1,7 +1,7 @@
 package com.example.graduationproject.sql;
 
+import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -10,9 +10,9 @@ import com.example.graduationproject.entity.OverAllSensor;
 import com.example.graduationproject.entity.Sensor;
 import com.example.graduationproject.entity.User;
 import com.example.graduationproject.entity.ZigbeeNode;
+import com.example.graduationproject.util.BitmapUtil;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,6 +50,61 @@ public class DatabaseManager {
             db.close();
         }
         return users;
+    }
+
+    public String selectUserPassword(String username){
+        String password = null;
+        SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+        Cursor c = db.rawQuery("select * from sys_user where username = ?", new String[]{username});
+        try {
+            while (c.moveToNext()) {
+                password = c.getString(c.getColumnIndex("password"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            c.close();
+            db.close();
+        }
+        return password;
+    }
+
+    public User selectUserInfo(String username) {
+        User data = null;
+        SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+        Cursor c = db.rawQuery("select * from sys_user where username = ?", new String[]{username});
+        try {
+            while (c.moveToNext()) {
+                data = new User();
+                data.setNickname(c.getString(c.getColumnIndex("nickname")));
+                data.setGender(c.getString(c.getColumnIndex("gender")));
+                data.setAddress(c.getString(c.getColumnIndex("address")));
+                data.setBirthday(c.getString(c.getColumnIndex("birthday")));
+                data.setSign(c.getString(c.getColumnIndex("sign")));
+                data.setUserpic(BitmapUtil.byteToBitmap(c.getBlob(c.getColumnIndex("userpic"))));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            c.close();
+            db.close();
+        }
+        return data;
+    }
+
+    public boolean updateUserInfo(String username,ContentValues cv) {
+        boolean isSuccess = false;
+        SQLiteDatabase db = sqliteHelper.getWritableDatabase();
+        try {
+            db.update("sys_user", cv, "username = ?", new String[]{username});
+            isSuccess = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            isSuccess = false;
+        } finally {
+            db.close();
+        }
+        return isSuccess;
     }
 
     public List<Gateway> selectAllGateway() {
@@ -92,7 +147,7 @@ public class DatabaseManager {
         Cursor c = db.rawQuery("select * from t_zigbee_node where gateway_id = ? ORDER BY created DESC limit 2", new String[]{id});
         try {
             while (c.moveToNext()) {
-                if(datas == null){
+                if (datas == null) {
                     datas = new ArrayList<>();
                 }
                 data = new ZigbeeNode();
@@ -112,11 +167,11 @@ public class DatabaseManager {
         return datas;
     }
 
-    public List<Sensor> selectRecentlySensorDatas(String gateway_id,String node_addr,String channel){
+    public List<Sensor> selectRecentlySensorDatas(String gateway_id, String node_addr, String channel) {
         List<Sensor> datas = null;
         Sensor data = null;
         SQLiteDatabase db = sqliteHelper.getReadableDatabase();
-        Cursor c = db.rawQuery("select * from t_sensor where gateway_id = ? and node_addr = ? and channel = ?  ORDER BY created DESC LIMIT ?", new String[]{gateway_id,node_addr,channel,"30"});
+        Cursor c = db.rawQuery("select * from t_sensor where gateway_id = ? and node_addr = ? and channel = ?  ORDER BY created DESC LIMIT ?", new String[]{gateway_id, node_addr, channel, "30"});
         try {
             while (c.moveToNext()) {
                 if (datas == null) {
@@ -138,10 +193,10 @@ public class DatabaseManager {
         return datas;
     }
 
-    public OverAllSensor selectOverAllSensorDatas(String gateway_id, String node_addr, String channel, String dateFormat){
+    public OverAllSensor selectOverAllSensorDatas(String gateway_id, String node_addr, String channel, String dateFormat) {
         OverAllSensor data = null;
         SQLiteDatabase db = sqliteHelper.getReadableDatabase();
-        Cursor c = db.rawQuery("select count(case when value between 0 and 75 then value end),count(case when value between 76 and 90 then value end),count(case when value between 91 and 100 then value end) from t_sensor where gateway_id = ? and node_addr = ? and channel = ? and created LIKE "+"'"+dateFormat+"%'", new String[]{gateway_id,node_addr,channel});
+        Cursor c = db.rawQuery("select count(case when value between 0 and 75 then value end),count(case when value between 76 and 90 then value end),count(case when value between 91 and 100 then value end) from t_sensor where gateway_id = ? and node_addr = ? and channel = ? and created LIKE " + "'" + dateFormat + "%'", new String[]{gateway_id, node_addr, channel});
         try {
             while (c.moveToNext()) {
                 data = new OverAllSensor();

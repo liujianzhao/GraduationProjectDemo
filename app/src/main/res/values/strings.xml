@@ -10,6 +10,7 @@
     <string name="title_activity_about">AboutActivity</string>
     <string name="title_activity_gateway_detail">GatewayDetailActivity</string>
 
+    <string name="password_digits">1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
 
     //二维码扫描相关String
@@ -138,5 +139,6 @@
 
     <string name="viewfinderview_status_text1">将二维码/条码放入取景框内</string>
     <string name="viewfinderview_status_text2">即可自动扫描</string>
+    <string name="title_activity_user">UserActivity</string>
 
 </resources>

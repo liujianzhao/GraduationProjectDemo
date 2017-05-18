@@ -89,9 +89,7 @@ public class GatewayListActivity extends AppCompatActivity
         img_userPic = (ImageView)headerLayout.findViewById(R.id.img_userpic);
         tv_userName = (TextView)headerLayout.findViewById(R.id.tv_username);
         tv_roleName = (TextView)headerLayout.findViewById(R.id.tv_rolename);
-        User user = SharedPreferencesUtil.loadLoginUserData(context);
-        tv_userName.setText(user.getUsername());
-        tv_roleName.setText(user.getRoleName());
+        loadNavigationViewData();
 
         //筛选过滤器
         et_filter = (EditText)findViewById(R.id.et_filter);
@@ -149,6 +147,19 @@ public class GatewayListActivity extends AppCompatActivity
         });
         // 进入第一次自动加载列表
         refreshListView.firstLoadDatas();
+    }
+
+    @Override
+    protected void onResume() {
+        loadNavigationViewData();
+        super.onResume();
+    }
+
+    private void loadNavigationViewData() {
+        User user = dbManager.selectUserInfo(SharedPreferencesUtil.loadLoginUserData(context).getUsername());
+        img_userPic.setImageBitmap(user.getUserpic());
+        tv_userName.setText(user.getNickname());
+        tv_roleName.setText(user.getSign());
     }
 
     private void filterData(String data){
@@ -238,6 +249,9 @@ public class GatewayListActivity extends AppCompatActivity
             Intent intent = new Intent(context,LoginActivity.class);
             startActivity(intent);
             finish();
+        }else if(id == R.id.nav_user){
+            Intent intent = new Intent(GatewayListActivity.this,UserActivity.class);
+            startActivity(intent);
         }
 //        if (id == R.id.nav_camera) {
 //            // Handle the camera action

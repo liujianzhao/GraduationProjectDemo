@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_user"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.graduationproject.UserActivity"
+    tools:showIn="@layout/activity_user">
+
+    <RelativeLayout
+        android:id="@+id/layout_chooseuserpic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="头像"/>
+
+        <ImageView
+            android:id="@+id/img_userpic"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_changenickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="6"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="昵称"
+            android:layout_weight="2"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:layout_weight="4"
+            android:maxLength="30"
+            android:id="@+id/tv_nickname" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="6"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="用户名"
+            android:layout_weight="2"/>
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:layout_weight="4" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_changepassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="6"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="修改密码"
+            android:layout_weight="2"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"
+            android:textColor="@color/red"
+            android:gravity="right"
+            android:layout_weight="4"
+            android:text="点击修改"
+            android:id="@+id/tv_password" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layout_changegender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:weightSum="6"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="性别"
+            android:layout_weight="2"
+            android:id="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/tv_gender"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"
+            android:layout_weight="4"
+            android:textColor="@color/black"
+            android:gravity="right" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_changebirthday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="6"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="生日"
+            android:layout_weight="2"/>
+
+        <TextView
+            android:id="@+id/tv_birthday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:layout_weight="4"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layout_changeaddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="6"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="地址"
+            android:layout_weight="2"/>
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:maxLength="30"
+            android:layout_weight="4"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_changesign"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="6"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="个性签名"
+            android:layout_weight="2"/>
+
+        <TextView
+            android:id="@+id/tv_sign"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:gravity="right"
+            android:maxLength="30"
+            android:layout_weight="4"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
