@@ -1,6 +1,7 @@
 package com.example.graduationproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
@@ -16,10 +17,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.example.graduationproject.ddpush.tcp.RealDataActivity;
 import com.example.graduationproject.entity.Gateway;
 import com.example.graduationproject.entity.OverAllSensor;
 import com.example.graduationproject.entity.Sensor;
@@ -76,6 +83,11 @@ public class GatewayDetailActivity extends AppCompatActivity {
     private static CustomPopupWindow recently_customPopupWindow;
     private static SensorBarChartView barChart_recently_sensor;
 
+    //page4
+    private static ListView listView;
+    private static ListAdapter adapter;
+    private static List<String> datas = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +111,10 @@ public class GatewayDetailActivity extends AppCompatActivity {
         //三个小标题
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        datas.add("温度实时查看");
+        datas.add("湿度实时查看");
+        adapter = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1,datas);
     }
 
     //嵌入在activity里面的小页面
@@ -156,6 +172,18 @@ public class GatewayDetailActivity extends AppCompatActivity {
                 recently_customPopupWindow = (CustomPopupWindow) rootView.findViewById(R.id.custompopupwindow);
                 barChart_recently_sensor = (SensorBarChartView) rootView.findViewById(R.id.barchart_recently_sensor);
                 loadRecentlyData();
+            }else if(getArguments().getInt(ARG_SECTION_NUMBER) == 4){
+                rootView = inflater.inflate(R.layout.fragment_gateway_detail_realdata, container, false);
+                listView = (ListView)rootView.findViewById(R.id.listview);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent("RealDataActivity");
+                        intent.putExtra("title",datas.get(position));
+                        startActivity(intent);
+                    }
+                });
             }
             return rootView;
         }
@@ -336,18 +364,20 @@ public class GatewayDetailActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "终端基本信息";
+                    return "终端信息";
                 case 1:
-                    return "总体数据分析";
+                    return "总体分析";
                 case 2:
-                    return "近期数据分析";
+                    return "近期分析";
+                case 3:
+                    return "实时查看";
             }
             return null;
         }
