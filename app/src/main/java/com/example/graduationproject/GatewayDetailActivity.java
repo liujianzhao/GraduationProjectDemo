@@ -112,8 +112,10 @@ public class GatewayDetailActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        datas.add("温度实时查看");
-        datas.add("湿度实时查看");
+        if(datas.isEmpty()){
+            datas.add("温度实时查看");
+            datas.add("湿度实时查看");
+        }
         adapter = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1,datas);
     }
 

@@ -10,7 +10,7 @@ public class Params {
 	public static String RECEIVE_PKGS = "receivePkgs";
 
 
-	public static String SERVER_IP_DATA = "10.4.252.176";
+	public static String SERVER_IP_DATA = "10.99.54.200";
 	public static String SERVER_PORT_DATA = "9966";
 	public static String PUSH_PORT_DATA = "9999";
 	public static String USER_NAME_DATA01 = "01";//使用此名字获取温度随机值
